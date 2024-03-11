@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using ProductApi.Models.Domain;
 using ProductApi.Models.DTO;
 using ProductApi.Repository.Abstract;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace ProductApi.Controllers
 {
@@ -21,24 +23,27 @@ namespace ProductApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Add([FromForm]Product model)
+        public IActionResult Add([FromForm] Product model)
         {
             var status = new Status();
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 status.StatusCode = 0;
                 status.Message = "Please pass the valid data";
                 return Ok(status);
             }
-            if(model.ImageFile != null)
+            if (model.ImageFile != null)
             {
                 var fileResult = _fileService.SaveImage(model.ImageFile);
-                if(fileResult.Item1 == 1) 
+                if (fileResult.Item1 == 1)
                 {
-                    model.ProductImage = fileResult.Item2;
+                    // Lấy số từ tên tệp hình ảnh và loại bỏ các ký tự "#", ".jpg", ".png", ".jpeg"
+                    string imageName = Path.GetFileNameWithoutExtension(model.ImageFile.FileName);
+                    string numberPart = Regex.Match(imageName, @"\d+").Value;
+                    model.ProductImage = numberPart;
                 }
-                var productResult = _productRepo.Add(model);
-                if (productResult)
+                var ImageResult = _productRepo.Add(model);
+                if (ImageResult)
                 {
                     status.StatusCode = 1;
                     status.Message = "Added successfully";
@@ -48,9 +53,12 @@ namespace ProductApi.Controllers
                     status.StatusCode = 0;
                     status.Message = "Error";
                 }
-
             }
-            return Ok(status);
+            return Ok(new
+            {
+                message = status.Message,
+                productImage = model.ProductImage
+            });
         }
     }
 }

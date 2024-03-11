@@ -11,7 +11,7 @@ using ProductApi.Models.Domain;
 namespace ProductApi.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240311091856_init")]
+    [Migration("20240311100311_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,6 @@ namespace ProductApi.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ProductImage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

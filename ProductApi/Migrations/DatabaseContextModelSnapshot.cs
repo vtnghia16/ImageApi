@@ -32,10 +32,6 @@ namespace ProductApi.Migrations
                     b.Property<string>("ProductImage")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Product");
