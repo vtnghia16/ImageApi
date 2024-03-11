@@ -16,7 +16,7 @@ namespace ProductApi.Repository.Implementation
             try
             {
                 var contentPath = this.environment.ContentRootPath;
-                // path = "c://projects/productminiapi/uploads" ,not exactly something like that
+                // path : save url
                 var path = Path.Combine(contentPath, "Uploads");
                 if (!Directory.Exists(path))
                 {
@@ -32,7 +32,8 @@ namespace ProductApi.Repository.Implementation
                     return new Tuple<int, string>(0, msg);
                 }
                 string uniqueString = Guid.NewGuid().ToString();
-                // we are trying to create a unique filename here
+
+                // Trying to create a unique filename here
                 var newFileName = uniqueString + ext;
                 var fileWithPath = Path.Combine(path, newFileName);
                 var stream = new FileStream(fileWithPath, FileMode.Create);
@@ -46,23 +47,5 @@ namespace ProductApi.Repository.Implementation
             }
         }
 
-        public bool DeleteImage(string imageFileName)
-        {
-            try
-            {
-                var wwwPath = this.environment.WebRootPath;
-                var path = Path.Combine(wwwPath, "Uploads\\", imageFileName);
-                if (System.IO.File.Exists(path))
-                {
-                    System.IO.File.Delete(path);
-                    return true;
-                }
-                return false;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
     }
 }

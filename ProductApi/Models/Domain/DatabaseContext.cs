@@ -10,6 +10,7 @@ namespace ProductApi.Models.Domain
 
         }
 
+        // Set data mapping csdl
         public DbSet<Product> Product { get; set;}
     }
 }

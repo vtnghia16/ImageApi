@@ -10,13 +10,13 @@ namespace ProductApi.Controllers
 {
     [Route("api/[controller]/{action}")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class NumberController : ControllerBase
     {
         private readonly IFileService _fileService;
 
         private readonly IProductRepository _productRepo;
 
-        public ProductController(IFileService fs, IProductRepository productRepo)
+        public NumberController(IFileService fs, IProductRepository productRepo)
         {
             this._fileService = fs;
             this._productRepo = productRepo;
@@ -37,7 +37,7 @@ namespace ProductApi.Controllers
                 var fileResult = _fileService.SaveImage(model.ImageFile);
                 if (fileResult.Item1 == 1)
                 {
-                    // Lấy số từ tên tệp hình ảnh và loại bỏ các ký tự "#", ".jpg", ".png", ".jpeg"
+                    // Get number from image file name and remove characters "#", ".jpg", ".png", ".jpeg"
                     string imageName = Path.GetFileNameWithoutExtension(model.ImageFile.FileName);
                     string numberPart = Regex.Match(imageName, @"\d+").Value;
                     model.ProductImage = numberPart;
